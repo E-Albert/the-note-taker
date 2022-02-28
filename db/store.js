@@ -1,6 +1,6 @@
 const fs = require('fs');
 const util = require('util');
-const uuid = require('uuid/v1');
+// const uuid = require('uuid/v1');
 
 //need a read file function
 //need a write file function
@@ -46,7 +46,8 @@ class Store {
         }
 
         const noteId = {
-            noteTitle, noteText, id: uuid()
+            noteTitle, noteText
+            // , id: uuid()
         }
         
         return this.getNotes()
@@ -57,7 +58,8 @@ class Store {
 
     deleteNotes(id) {
         return this.getNotes()
-            .then((note) => note.filter((notes)))
+            .then((note) => note.filter((notes) => notes.id !== id))
+            .then((filteredNote) => this.write(filteredNote))
     }
 }
 
