@@ -50,9 +50,15 @@ class Store {
         }
         
         return this.getNotes()
+            .then((note) => [...note, noteId])
+            .then((newNotes) => this.write(newNotes))
+            .then (() => noteId)
     }
 
-    deleteNotes()
+    deleteNotes(id) {
+        return this.getNotes()
+            .then((note) => note.filter((notes)))
+    }
 }
 
 module.exports = new Store();
