@@ -1,6 +1,6 @@
 const fs = require('fs');
 const util = require('util');
-// const uuid = require('uuid/v1');
+const { v4: uuidv4 } = require('uuid')
 
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
@@ -31,22 +31,26 @@ class Store {
     }
 
     addNotes(note) {
-        let noteTitle = note;
-        let noteText = note;
+        console.log(note)
+        let noteTitle = note.title;
+        let noteText = note.text;
 
         if (!noteTitle || !noteText) {
             throw new err("Need more information.")
         }
 
-        const noteId = {
-            noteTitle, noteText
-            // , id: uuid()
+        const noteId = uuidv4();
+
+        const newNote = {
+            title: noteTitle,
+            text: noteText,
+            id: noteId
         }
         
         return this.getNotes()
-            .then((note) => [...note, noteId])
+            .then((notes) => [...notes, newNote])
             .then((newNotes) => this.write(newNotes))
-            .then (() => noteId)
+            .then (() => newNote)
     }
 
     deleteNotes(id) {
