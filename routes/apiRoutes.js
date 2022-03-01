@@ -9,37 +9,30 @@ api.get("/notes", (req, res) => {
     noteData.getNotes()
         .then((notes) => {
             return res.json(notes)
-        }
-        
-    );
-})
+        })
+        .catch((err) => res.status(500).json(err))
+});
 
 /*this should should receive a new note to save on the request body, 
 add it to the db.json file, and then return the new note to the client.
     You'll need to find a way to give each note a unique id when it's saved
         (look into npm packages that could do this for you).*/
 api.post("/notes", (req, res) => {
-
-    if (activeNote.id) {
-        noteTitle.setAttribute('readonly', true);
-        noteText.setAttribute('readonly', true);
-        noteTitle.value = activeNote.title;
-        noteText.value = activeNote.text;
-    } else {
-        noteTitle.removeAttribute('readonly');
-        noteText.removeAttribute('readonly');
-        noteTitle.value = '';
-        noteText.value = '';
-    }
-
+    noteData
+        .addNotes(req.body)
+        .then((notes) => {
+            return res.json(notes)
+        })
+        .catch((err) => res.status(500).json(err))
+   
 
 })
 
 api.delete("/notes/:id", (req, res) => {
-    deleteNote(noteId).then(() => {
-        getAndRenderNotes();
-        renderActiveNote();
-    })
+    noteData
+        .deleteNotes(req.params.id)
+        .then(() => res.json({ ok: true }))
+        .catch((err) => res.status(500).json(err))
 })
 
 module.export = api;
