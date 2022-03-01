@@ -20,13 +20,26 @@ add it to the db.json file, and then return the new note to the client.
         (look into npm packages that could do this for you).*/
 api.post("/notes", (req, res) => {
 
+    if (activeNote.id) {
+        noteTitle.setAttribute('readonly', true);
+        noteText.setAttribute('readonly', true);
+        noteTitle.value = activeNote.title;
+        noteText.value = activeNote.text;
+    } else {
+        noteTitle.removeAttribute('readonly');
+        noteText.removeAttribute('readonly');
+        noteTitle.value = '';
+        noteText.value = '';
+    }
+
+
 })
 
 api.delete("/notes/:id", (req, res) => {
-    
+    deleteNote(noteId).then(() => {
+        getAndRenderNotes();
+        renderActiveNote();
+    })
 })
-module.export = api;
 
-//how to implement store in api route
-//need a promise to allow user to CRUD
-//error handling
+module.export = api;
